@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simple Form</title>
+<style>
+    #output {
+        margin-top: 10px;
+        border: 1px solid #ccc;
+        padding: 10px;
+    }
+</style>
+</head>
+<body>
+
+<h2>Simple Form</h2>
+<!-- <form id="myForm"> -->
+    <textarea id="textInput" rows="4" cols="50"></textarea><br>
+    <button type="button" onclick="printText()">Stampa Testo</button>
+<!-- </form> -->
+
+<div id="output"></div>
+
+<script>
+function printText() {
+    var textInput = document.getElementById("textInput").value;
+    var outputDiv = document.getElementById("output");
+    outputDiv.innerHTML = textInput;
+}
+</script>
+
+</body>
+</html>

@@ -1,5 +1,5 @@
 'use strict';
-import DID_API from './api.json' assert { type: 'json' };
+import DID_API from './api.json' with { type: 'json' };
 
 if (DID_API.key == '🤫') alert('Please put your api key inside ./api.json and restart..');
 
@@ -34,10 +34,15 @@ const iceGatheringStatusLabel = document.getElementById('ice-gathering-status-la
 const signalingStatusLabel = document.getElementById('signaling-status-label');
 const streamingStatusLabel = document.getElementById('streaming-status-label');
 const streamEventLabel = document.getElementById('stream-event-label');
+let testToSpeech = document.getElementById('testToSpeech');
+let testToSpeechText = ', , ' + document.getElementById('testToSpeech').value + ' , '; 
+
+console.log('testo iniziale: ', testToSpeechText);
 
 const presenterInputByService = {
   talks: {
-    source_url: 'https://d-id-public-bucket.s3.amazonaws.com/or-roman.jpg',
+    // source_url: 'https://d-id-public-bucket.s3.amazonaws.com/or-roman.jpg',
+    source_url: 'https://create-images-results.d-id.com/google-oauth2%7C109327818973172778945/upl_NEg0lvZ-OaYG6kCzGu46G/image.jpeg',
   },
   clips: {
     presenter_id: 'rian-lZC6MmWfC1',
@@ -101,6 +106,15 @@ startButton.onclick = async () => {
     (peerConnection?.signalingState === 'stable' || peerConnection?.iceConnectionState === 'connected') &&
     isStreamReady
   ) {
+    testToSpeechText = ', , ' + document.getElementById('testToSpeech').value + ' , '; 
+    console.log('testo inviato: ', testToSpeechText);
+
+    console.log('{DID_API.url: ', DID_API.url);
+    console.log('{DID_API.service: ', DID_API.service);
+
+
+
+
     const playResponse = await fetchWithRetries(`${DID_API.url}/${DID_API.service}/streams/${streamId}`, {
       method: 'POST',
       headers: {
@@ -109,8 +123,27 @@ startButton.onclick = async () => {
       },
       body: JSON.stringify({
         script: {
-          type: 'audio',
-          audio_url: 'https://d-id-public-bucket.s3.us-west-2.amazonaws.com/webrtc.mp3',
+          // type: 'audio',
+          // audio_url: 'https://d-id-public-bucket.s3.us-west-2.amazonaws.com/webrtc.mp3',
+
+          type: 'text',
+          // I tuffi sono una disciplina basata sul controllo del corpo
+          // input: ", , Ciao è un po' che non ci vediamo, oggi siamo qui per parlare della sicurezza sul lavoro. Mi raccomando è un tema molto importante, seguilo con attenzione! Buon lavoro! , ",
+          input: testToSpeechText,
+
+          provider: {
+            // type: "microsoft",
+            // voice_id: "en-US-JennyNeural",
+            // voice_config: {
+            //     style: "Cheerful"
+            //   }
+            
+            type: "microsoft",
+            voice_id: "it-IT-BenignoNeural",
+            voice_config: {
+                 style: "Cheerful"
+               }
+          }
         },
         ...(DID_API.service === 'clips' && {
           background: {
@@ -348,6 +381,7 @@ function setStreamVideoElement(stream) {
 
 function playIdleVideo() {
   idleVideoElement.src = DID_API.service == 'clips' ? 'rian_idle.mp4' : 'or_idle.mp4';
+  // idleVideoElement.src = DID_API.service == 'clips' ? 'rian_idle.mp4' : 'Gianfri_idle.jpeg';
 }
 
 function stopAllStreams() {

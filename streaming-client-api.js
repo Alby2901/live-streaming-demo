@@ -109,10 +109,11 @@ startButton.onclick = async () => {
     testToSpeechText = ', , ' + document.getElementById('testToSpeech').value + ' , '; 
     console.log('testo inviato: ', testToSpeechText);
 
-    console.log('{DID_API.url: ', DID_API.url);
-    console.log('{DID_API.service: ', DID_API.service);
-
-
+    console.log('DID_API.url: ', DID_API.url);
+    console.log('DID_API.service: ', DID_API.service);
+    console.log('streamId: ', streamId);
+    console.log('sessionId: ', sessionId);
+    console.log('url: ', + DID_API.url + "/" + DID_API.service + '/streams/' + streamId);
 
 
     const playResponse = await fetchWithRetries(`${DID_API.url}/${DID_API.service}/streams/${streamId}`, {
@@ -157,6 +158,7 @@ startButton.onclick = async () => {
       }),
     });
   }
+  // console.log('PlayResponce: ' + JSON.stringify(playResponse));
 };
 
 const destroyButton = document.getElementById('destroy-button');
